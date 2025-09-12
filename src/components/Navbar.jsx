@@ -10,6 +10,9 @@ const Navbar = () => {
             <li>
                 <Link to="/countries">Countries</Link>
             </li>
+            <li>
+                <Link to="/countries/Sweden">Sweden detail</Link>
+            </li>
            
         </ul>
     </nav>
