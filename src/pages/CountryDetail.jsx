@@ -37,8 +37,12 @@ const CountryDetail = () => {
           </p>
 
           <p>
-            <strong>Currency:</strong>{" "}
-            {detail && detail.currencies ? "Available" : "Not available"}
+            <strong>Currencies:</strong>{" "}
+            {detail && detail.currencies 
+            ? Object.entries(detail.currencies)
+                .map(([code, { name, symbol }]) => `${name} (${symbol}, ${code})`)
+                .join(", ")
+            : "Not available"}
           </p>
 
           {detail && detail.maps 
