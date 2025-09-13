@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCountriesRegion } from "../redux/countriesSlice";
 
+const regions = ["Europe", "Asia", "Oceania", "Americas", "Africa"];
+
 const Countries = () => {
   const dispatch = useDispatch();
   const {list, status, error} = useSelector((state)=> state.countries);
@@ -8,10 +10,12 @@ const Countries = () => {
   return (
     <div>
       <h2>Countries Page</h2>
-
-      <button onClick={()=> dispatch(fetchCountriesRegion("europe"))}>
-        Load Europe
-      </button>
+      {regions.map((region)=> (
+        <button key={region} onClick={()=> dispatch(fetchCountriesRegion(region.toLowerCase()))} >
+          {region}
+        </button>
+      ))}
+      
 
       {status === "loading" && <p>Loading...</p>}
       {status === "failed" && <p>Error: {error}</p>}
