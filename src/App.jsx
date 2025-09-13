@@ -16,7 +16,6 @@ function App() {
         <Routes>
           <Route path='/'  element={<Home />}/>
           <Route path='/countries'  element={<Countries />}/>
-          <Route path='/countries'  element={<Countries />}/>
           <Route path='/countries/:countryName'  element={<CountryDetail />}/>
           <Route path='/collection'  element={<Collection />}/>
           <Route path='/quiz'  element={<Quiz/>}/>

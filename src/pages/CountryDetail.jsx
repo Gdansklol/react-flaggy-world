@@ -1,14 +1,56 @@
-import {useParams} from 'react-router-dom';
+import {useEffect} from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCountryDetail } from '../redux/countriesSlice';
 
 const CountryDetail = () => {
-    const {countryName} = useParams();
+  const { countryName } = useParams();
+  const dispatch = useDispatch();
+  const { detail, status, error } = useSelector((state) => state.countries);
+
+  useEffect(()=> {
+    dispatch(fetchCountryDetail(countryName));
+  },[dispatch,countryName])
 
   return (
-    <section>
-        <h1>Country Name Page</h1>
-        <p>Selecte country: {countryName}</p>
-    </section>
-  )
-}
+    <>
+      <section>
+        <h2>Country Detail Page</h2>
+        <p>Selected Country: {countryName}</p>
+      </section>
+
+      {status === "loading" && <p>Loading...</p>}
+      {status === "failed" && <p>Error: {error}</p>}
+
+      {status === "success" && detail && (
+        <div>
+          <h3>{detail && detail.name ? detail.name.common : "No name available"}</h3>
+
+          {detail && detail.flags 
+            ? <img src={detail.flags.svg} alt="Flag" />
+            : <p>No flag available</p>
+          }
+
+          <p>
+            <strong>Population:</strong>{" "}
+            {detail && detail.population ? detail.population : "Unknown"}
+          </p>
+
+          <p>
+            <strong>Currency:</strong>{" "}
+            {detail && detail.currencies ? "Available" : "Not available"}
+          </p>
+
+          {detail && detail.maps 
+            ? <a href={detail.maps.googleMaps}>View on Google Maps</a>
+            : <p>No map link available</p>
+          }
+
+          <button>Save</button>
+        </div>
+      )}
+    </>
+  );
+};
 
 export default CountryDetail;
