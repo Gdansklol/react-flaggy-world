@@ -28,7 +28,7 @@ const countriesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // region fetch
+     
       .addCase(fetchCountriesRegion.pending, (state) => {
         state.status = "loading";
       })
@@ -41,7 +41,7 @@ const countriesSlice = createSlice({
         state.error = action.error.message;
       })
 
-      // detail fetch
+
       .addCase(fetchCountryDetail.pending, (state) => {
         state.status = "loading";
         state.error = null;
