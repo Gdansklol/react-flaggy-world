@@ -1,17 +1,17 @@
 import {useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCountryDetail } from '../redux/countriesSlice';
 
 const CountryDetail = () => {
   const { countryName } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { detail, status, error } = useSelector((state) => state.countries);
 
   useEffect(()=> {
     dispatch(fetchCountryDetail(countryName));
-  },[dispatch,countryName])
-
+  },[dispatch,countryName]);
 
   const handleSave = () => {
     if(!detail) return;
@@ -19,9 +19,14 @@ const CountryDetail = () => {
     let saved = JSON.parse(localStorage.getItem("collection")) || [];
 
     if(!saved.some(country => country.name.common === detail.name.common)) {
-    saved.push(detail)
-   }
-    localStorage.setItem("collection", JSON.stringify(saved))
+      saved.push(detail);
+      localStorage.setItem("collection", JSON.stringify(saved));
+
+      alert(" Country saved to your collection!");
+      navigate("/collection"); 
+    } else {
+      alert(" This country is already in your collection!");
+    }
   };
 
   return (
@@ -36,29 +41,29 @@ const CountryDetail = () => {
 
       {status === "success" && detail && (
         <div>
-          <h3>{detail && detail.name ? detail.name.common : "No name available"}</h3>
+          <h3>{detail?.name?.common || "No name available"}</h3>
 
-          {detail && detail.flags 
-            ? <img src={detail.flags.svg} alt="Flag" />
+          {detail?.flags 
+            ? <img src={detail.flags.svg} alt={detail.flags.alt || "Flag"} />
             : <p>No flag available</p>
           }
 
           <p>
             <strong>Population:</strong>{" "}
-            {detail && detail.population ? detail.population : "Unknown"}
+            {detail.population || "Unknown"}
           </p>
 
           <p>
             <strong>Currencies:</strong>{" "}
-            {detail && detail.currencies 
-            ? Object.entries(detail.currencies)
-                .map(([code, { name, symbol }]) => `${name} (${symbol}, ${code})`)
-                .join(", ")
-            : "Not available"}
+            {detail.currencies 
+              ? Object.entries(detail.currencies)
+                  .map(([code, { name, symbol }]) => `${name} (${symbol}, ${code})`)
+                  .join(", ")
+              : "Not available"}
           </p>
 
-          {detail && detail.maps 
-            ? <a href={detail.maps.googleMaps}>View on Google Maps</a>
+          {detail?.maps 
+            ? <a href={detail.maps.googleMaps} target="_blank" rel="noreferrer">View on Google Maps</a>
             : <p>No map link available</p>
           }
 
