@@ -18,7 +18,7 @@ const CountryDetail = () => {
 
     let saved = JSON.parse(localStorage.getItem("collection")) || [];
 
-    if(!saved.find(country => country.name.common === detail.name.common)) {
+    if(!saved.some(country => country.name.common === detail.name.common)) {
     saved.push(detail)
    }
     localStorage.setItem("collection", JSON.stringify(saved))
