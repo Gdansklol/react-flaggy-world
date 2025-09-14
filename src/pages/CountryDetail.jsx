@@ -12,6 +12,18 @@ const CountryDetail = () => {
     dispatch(fetchCountryDetail(countryName));
   },[dispatch,countryName])
 
+
+  const handleSave = () => {
+    if(!detail) return;
+
+    let saved = JSON.parse(localStorage.getItem("collection")) || [];
+
+    if(!saved.find(country => country.name.common === detail.name.common)) {
+    saved.push(detail)
+   }
+    localStorage.setItem("collection", JSON.stringify(saved))
+  };
+
   return (
     <>
       <section>
@@ -50,7 +62,7 @@ const CountryDetail = () => {
             : <p>No map link available</p>
           }
 
-          <button>Save</button>
+          <button onClick={handleSave}>Save</button>
         </div>
       )}
     </>
