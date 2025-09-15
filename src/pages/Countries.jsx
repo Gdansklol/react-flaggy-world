@@ -11,9 +11,10 @@ const Countries = () => {
   const {list, status, error} = useSelector((state)=> state.countries);
 
   return (
-    <div>
+    <div className="countries-page">
       <h2>Countries Page</h2>
-      <div className="">
+
+      <div className="region-buttons">
       {regions.map((region)=> (
         <button key={region} onClick={()=> dispatch(fetchCountriesRegion(region.toLowerCase()))} >
           {region}
@@ -25,15 +26,16 @@ const Countries = () => {
       {status === "failed" && <p>Error: {error}</p>}
 
       {status === "success" && (
-        <div>
+        <div className="countries-list">
           {list.map((country) => (
             <div 
             key={country.cca3}
+            className="country-card"
             onClick={()=>navigate(`/countries/${country.name.common}`)}
             >
               <img 
               src={country.flags.png}
-              ald={country.name.common}
+              alt={country.name.common}
               />
               <p>{country.name.common}</p>
             </div>
