@@ -73,8 +73,23 @@ const Quiz = () => {
     if (currentQuestionIndex + 1 < quizQuestions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      saveResultToLocalStorage();
       setQuizStage("finished");
     }
+  };
+
+  const saveResultToLocalStorage = () => {
+    const newResult = {
+      username,
+      region: selectedRegion,
+      score: userScore,
+    };
+
+    const storedResults= JSON.parse(localStorage.getItem("quizResults")) || [];
+
+    storedResults.push(newResult);
+
+    localStorage.setItem("quizResults", JSON.stringify(storedResults));
   };
 
   return (
