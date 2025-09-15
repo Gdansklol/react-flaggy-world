@@ -2,13 +2,14 @@ import { useState } from "react";
 
 const Quiz = () => {
   const [quizStage, setQuizStage] = useState("start"); 
-  const [questions, setQuestions] = useState([]);
+  const [quizQuestions, setQuizQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
-  const [score, setScore] = useState(0);
+  const [userScore, setUserScore] = useState(0);
 
   const [username, setUsername] = useState("");
-  const [region, setRegion] = useState("Europe");
+  const [selectedRegion, setSelectedRegion] = useState("Europe");
+  const [feedbackMsg, setFeedbackMasg] = useState("");
 
   const shuffleArray = (countries) => {
     let countriesCopied = [...countries];
@@ -16,34 +17,37 @@ const Quiz = () => {
     let countriesWithRandom =countriesCopied.map((country)=> {
       return {
         country,
-        randomCountryNumber: Math.random()
+        randomNumber: Math.random()
       }
     })
 
     countriesWithRandom.sort(
-      (a,b) => a.randomCountryNumber - b.randomCountryNumber
+      (a,b) => a.randomNumber - b.randomNumber
     );
 
-    let shuffledCountries = countriesWithRandom.map((countriesWithRandom)=>countriesWithRandom .country);
+    let shuffledCountries = countriesWithRandom.map(
+      (countryWithRandom)=>
+      countryWithRandom.country);
 
     return shuffledCountries;
-
   }
   
-
-
-
-  const handleStartClick = async () => {
+  const handleStartQuiz = async () => {
     if (!username) {
       alert("Oops! You forgot your username.");
       return;
     }
     try {
-      const res = await fetch(`https://restcountries.com/v3.1/region/${region.toLowerCase()}`
+      const res = await fetch(
+        `https://restcountries.com/v3.1/region/${selectedRegion.toLowerCase()}`
     );
     const data = await res.json();
-    const shuffledQuestions = shuffleArray(data);
-    setQuestions(shuffledQuestions);
+
+    const randomQuestions = shuffleArray(data).slice(0, 15);
+
+    setQuizQuestions(randomQuestions);
+    setCurrentQuestionIndex(0);
+    setUserScore(0)
     setQuizStage("inProgress");
     } 
     catch (error) {
@@ -52,21 +56,21 @@ const Quiz = () => {
     }
   };
 
-  const handleSubmit = () => {
-    const currentCountry = questions[currentQuestionIndex];
+  const handleSubmitAnswer = () => {
+    const currentCountry = quizQuestions[currentQuestionIndex];
     if (
       userAnswer.trim().toLowerCase() ===
       currentCountry.name.common.toLowerCase()
     ) {
-      setScore(score + 1);
-      alert(" Correct!");
+      setUserScore(userScore + 1);
+      setFeedbackMasg("correct!")
     } else {
-      alert(` Wrong! It was ${currentCountry.name.common}`);
+      setFeedbackMasg(`Wrong! the correct answer was ${currentCountry.name.common}` );
     }
 
     setUserAnswer("");
 
-    if (currentQuestionIndex + 1 < questions.length) {
+    if (currentQuestionIndex + 1 < quizQuestions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setQuizStage("finished");
@@ -80,7 +84,10 @@ const Quiz = () => {
           <h2>Start Quiz</h2>
 
           <h3>Select Region</h3>
-          <select value={region} onChange={(e) => setRegion(e.target.value)}>
+          <select 
+            value={selectedRegion} 
+            onChange={(e) => setSelectedRegion(e.target.value)}>
+
             <option value="Europe">Europe</option>
             <option value="Asia">Asia</option>
             <option value="Oceania">Oceania</option>
@@ -95,20 +102,20 @@ const Quiz = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
 
-          <button onClick={handleStartClick}>Start Quiz</button>
+          <button onClick={handleStartQuiz}>Start Quiz</button>
         </section>
       )}
 
       {quizStage === "inProgress" && (
         <div>
           <h3>
-            Question {currentQuestionIndex + 1} / {questions.length}
+            Question {currentQuestionIndex + 1} / {quizQuestions.length}
           </h3>
-          {questions[currentQuestionIndex] && (
+          {quizQuestions[currentQuestionIndex] && (
             <>
               <img
-                src={questions[currentQuestionIndex].flags.png}
-                alt={questions[currentQuestionIndex].name.common}
+                src={quizQuestions[currentQuestionIndex].flags.png}
+                alt={quizQuestions[currentQuestionIndex].name.common}
                 width="150"
               />
               <input
@@ -116,7 +123,9 @@ const Quiz = () => {
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
               />
-              <button onClick={handleSubmit}>Submit</button>
+              <button onClick={handleSubmitAnswer}>Submit</button>
+
+              <p>{feedbackMsg}</p>
             </>
           )}
         </div>
@@ -125,8 +134,10 @@ const Quiz = () => {
       {quizStage === "finished" && (
         <div>
           <h2>Quiz Finished!</h2>
+          <p>{feedbackMsg}</p>
           <p>
-            {username}, your score: {score} / {questions.length} in {region}
+            {username}, your score: {userScore} / {quizQuestions.length} in {""}
+            {selectedRegion}
           </p>
         </div>
       )}
