@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const Quiz = () => {
-  const [quizStage, setQuizStage] = useState("start"); 
+  const [quizStage, setQuizStage] = useState("start");
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
@@ -9,63 +9,64 @@ const Quiz = () => {
 
   const [username, setUsername] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("Europe");
-  const [feedbackMsg, setFeedbackMasg] = useState("");
+  const [feedbackMsg, setFeedbackMsg] = useState("");
 
   const shuffleArray = (countries) => {
-    let countriesCopied = [...countries];
+    let copied = [...countries];
 
-    let countriesWithRandom =countriesCopied.map((country)=> {
-      return {
-        country,
-        randomNumber: Math.random()
-      }
-    })
+    let countriesWithRandom = copied.map((country) => ({
+      country,
+      randomNumber: Math.random(),
+    }));
 
-    countriesWithRandom.sort(
-      (a,b) => a.randomNumber - b.randomNumber
+    countriesWithRandom.sort((a, b) => a.randomNumber - b.randomNumber);
+
+    let shuffled = countriesWithRandom.map(
+      (countryWithRandom) => countryWithRandom.country
     );
 
-    let shuffledCountries = countriesWithRandom.map(
-      (countryWithRandom)=>
-      countryWithRandom.country);
+    return shuffled;
+  };
 
-    return shuffledCountries;
-  }
-  
   const handleStartQuiz = async () => {
     if (!username) {
-      alert("Oops! You forgot your username.");
+      alert("Oops! You forgot your username 😅");
       return;
     }
     try {
       const res = await fetch(
         `https://restcountries.com/v3.1/region/${selectedRegion.toLowerCase()}`
-    );
-    const data = await res.json();
+      );
+      const data = await res.json();
 
-    const randomQuestions = shuffleArray(data).slice(0, 15);
+      const randomQuestions = shuffleArray(data).slice(0, 15);
 
-    setQuizQuestions(randomQuestions);
-    setCurrentQuestionIndex(0);
-    setUserScore(0)
-    setQuizStage("inProgress");
-    } 
-    catch (error) {
-      console.log(error);
-      alert("Oops! Faild to load countris quiz data.");
+      setQuizQuestions(randomQuestions);
+      setCurrentQuestionIndex(0);
+      setUserScore(0);
+      setFeedbackMsg("");
+      setQuizStage("inProgress");
+    } catch (error) {
+      console.error(error);
+      alert("Oops! Failed to load countries quiz data.");
     }
   };
 
   const handleSubmitAnswer = () => {
     const currentCountry = quizQuestions[currentQuestionIndex];
+    let newScore = userScore;
+
     if (
       userAnswer.trim().toLowerCase() ===
       currentCountry.name.common.toLowerCase()
     ) {
-      setUserScore(userScore + 1);
-      setFeedbackMasg("correct!")
+      newScore = userScore + 1;
+      setUserScore(newScore);
+      setFeedbackMsg(" Correct!");
     } else {
-      setFeedbackMasg(`Wrong! the correct answer was ${currentCountry.name.common}` );
+      setFeedbackMsg(
+        ` Wrong! The correct answer was ${currentCountry.name.common}`
+      );
     }
 
     setUserAnswer("");
@@ -73,19 +74,20 @@ const Quiz = () => {
     if (currentQuestionIndex + 1 < quizQuestions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      saveResultToLocalStorage();
+      saveResultToLocalStorage(newScore); 
       setQuizStage("finished");
     }
   };
 
-  const saveResultToLocalStorage = () => {
+  const saveResultToLocalStorage = (finalScore) => {
     const newResult = {
       username,
       region: selectedRegion,
-      score: userScore,
+      score: finalScore,
     };
 
-    const storedResults= JSON.parse(localStorage.getItem("quizResults")) || [];
+    const storedResults =
+      JSON.parse(localStorage.getItem("quizResults")) || [];
 
     storedResults.push(newResult);
 
@@ -99,10 +101,10 @@ const Quiz = () => {
           <h2>Start Quiz</h2>
 
           <h3>Select Region</h3>
-          <select 
-            value={selectedRegion} 
-            onChange={(e) => setSelectedRegion(e.target.value)}>
-
+          <select
+            value={selectedRegion}
+            onChange={(e) => setSelectedRegion(e.target.value)}
+          >
             <option value="Europe">Europe</option>
             <option value="Asia">Asia</option>
             <option value="Oceania">Oceania</option>
@@ -111,8 +113,8 @@ const Quiz = () => {
           </select>
 
           <h3>Enter Username</h3>
-          <input 
-            type="text" 
+          <input
+            type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -151,7 +153,7 @@ const Quiz = () => {
           <h2>Quiz Finished!</h2>
           <p>{feedbackMsg}</p>
           <p>
-            {username}, your score: {userScore} / {quizQuestions.length} in {""}
+            {username}, your score: {userScore} / {quizQuestions.length} in{" "}
             {selectedRegion}
           </p>
         </div>
