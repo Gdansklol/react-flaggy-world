@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {fetchCountriesRegion} from "../redux/countriesSlice";
 
 const Quiz = () => {
   const [quizStage, setQuizStage] = useState("start");
@@ -10,6 +12,11 @@ const Quiz = () => {
   const [username, setUsername] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("Europe");
   const [feedbackMsg, setFeedbackMsg] = useState("");
+
+  const dispatch = useDispatch();
+  const countries = useSelector((state)=> state.countries.list);
+  const status = useSelector((state)=> state.countries.status);
+  const error = useSelector((state)=> state.countries.error);
 
   const shuffleArray = (countries) => {
     let copied = [...countries];
@@ -29,28 +36,25 @@ const Quiz = () => {
   };
 
   const handleStartQuiz = async () => {
-    if (!username) {
-      alert("Oops! You forgot your username 😅");
+    if (!username.trim()) {
+      alert("Oops! You forgot your username ");
       return;
     }
-    try {
-      const res = await fetch(
-        `https://restcountries.com/v3.1/region/${selectedRegion.toLowerCase()}`
-      );
-      const data = await res.json();
+    
+      dispatch(fetchCountriesRegion(selectedRegion.toLowerCase()))
+      setQuizStage("inProgress");
+   
+  };
 
-      const randomQuestions = shuffleArray(data).slice(0, 15);
-
+  useEffect(()=> {
+    if(status === "success" && countries.length > 0) {
+      const randomQuestions = shuffleArray(countries).slice(0, 15);
       setQuizQuestions(randomQuestions);
-      setCurrentQuestionIndex(0);
+       setCurrentQuestionIndex(0);
       setUserScore(0);
       setFeedbackMsg("");
-      setQuizStage("inProgress");
-    } catch (error) {
-      console.error(error);
-      alert("Oops! Failed to load countries quiz data.");
     }
-  };
+  },[status, countries]);
 
   const handleSubmitAnswer = () => {
     const currentCountry = quizQuestions[currentQuestionIndex];
@@ -96,6 +100,9 @@ const Quiz = () => {
 
   return (
     <div>
+      {status === "loading" && <p>Loading quiz data...</p>}
+      {status === "failed" && <p> Failed to load quiz data. Please try again.</p>}
+
       {quizStage === "start" && (
         <section>
           <h2>Start Quiz</h2>
@@ -151,7 +158,7 @@ const Quiz = () => {
       {quizStage === "finished" && (
         <div>
           <h2>Quiz Finished!</h2>
-          <p>{feedbackMsg}</p>
+         
           <p>
             {username}, your score: {userScore} / {quizQuestions.length} in{" "}
             {selectedRegion}
