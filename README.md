@@ -2,7 +2,7 @@
 
 ## Projekt – Country Explorer
 
-Ett skol-/övningsprojekt i **React** där man kan:
+Ett skol-/projekt i **React** där man kan:
 - Studera länder från olika regioner (Europe, Asia, Oceania, Americas, Africa).
 - Spara favoritländer i en **Collection** (lagras i localStorage).
 - Köra ett **Quiz** (VG-nivå) för att testa sina kunskaper.

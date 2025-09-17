@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: url(https://www.toptal.com/designers/subtlepatterns/uploads/geometric-leaves.png);
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu {
+  position: relative;
+  width: 450px;
+  height: 70px;
+  background: black;
+  border-radius: 10px 10px 20px 20px;
+  padding: 0 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: scale(2);
+  transition: 0.5s;
+}
+
+.btn {
+  width: 80px;
+  height: 70px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 25px;
+  color: #fff;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: translateY(-5px);
+}
+
+.indicator {
+  position: absolute;
+  top: -60%;
+  width: 80px;
+  height: 80px;
+  background: black;
+  border-radius: 50%;
+  transform: translateX(0);
+  transition: 0.5s;
+}
+
+.indicator::before,
+.indicator::after {
+  content: "";
+  position: absolute;
+  top: 15.8%;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border-radius: 50%;
+}
+
+.indicator::before {
+  left: -28.5px;
+  box-shadow: 10px 15px black;
+}
+
+.indicator::after {
+  right: -28.5px;
+  box-shadow: -10px 15px black;
+}
+
+.btn.active {
+  transform: translateY(-50%);
+}
+
+.btn.active i {
+  width: 60px;
+  height: 60px;
+  background: var(--clr);
+  border-radius: 50%;
+  line-height: 60px;
+  font-size: 28px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 1200px) {
+  .menu {
+    transform: scale(1.8);
+  }
+}
+
+@media (max-width: 960px) {
+  .menu {
+    transform: scale(1.4);
+  }
+}
+
+@media (max-width: 720px) {
+  .menu {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 510px) {
+  .menu {
+    transform: scale(0.9);
+  }
+}

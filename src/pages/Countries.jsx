@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCountriesRegion } from "../redux/countriesSlice";
 import { useNavigate } from "react-router-dom";
-import '../css/countries.css';
+import '../css/Countries.css';
 
 const regions = ["Europe", "Asia", "Oceania", "Americas", "Africa"];
 
