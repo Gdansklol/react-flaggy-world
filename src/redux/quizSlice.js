@@ -8,9 +8,9 @@ const quizSlice = createSlice({
     stage: "start", // "start" | "inProgress" | "finished"
     questions: [],
     feedback: "",
-    userAnswer:"",
-    username:"",
-    region:"Europe",
+    userAnswer: "",
+    username: "",
+    region: "Europe",
   },
   reducers: {
     setQuestions: (state, action) => {
@@ -41,6 +41,8 @@ const quizSlice = createSlice({
       state.questions = [];
       state.feedback = "";
       state.userAnswer = "";
+      state.username = "";     
+      state.region = "Europe"; 
     },
     setStage: (state, action) => {
       state.stage = action.payload;
@@ -53,5 +55,4 @@ export const {
   incrementScore, nextQuestion, resetQuiz, setStage 
 } = quizSlice.actions;
 
-  
 export default quizSlice.reducer;
