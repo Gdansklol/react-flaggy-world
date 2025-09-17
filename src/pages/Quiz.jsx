@@ -1,41 +1,50 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCountriesRegion } from "../redux/countriesSlice";
-import {incrementScore, nextQuestion, resetQuiz, setStage} from "../redux/quizSlice";
+import {
+  incrementScore,
+  nextQuestion, 
+  resetQuiz,
+  setStage,
+  setQuestions,
+  setFeedback,
+  setUserAnswer,
+  setUsername,
+  setRegion,
+} from "../redux/quizSlice";
 
 const Quiz = () => {
-
-  const [quizQuestions, setQuizQuestions] = useState([]);
-  const [userAnswer, setUserAnswer] = useState("");
-
-  const [username, setUsername] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("Europe");
-  const [feedbackMsg, setFeedbackMsg] = useState("");
-
   const dispatch = useDispatch();
+
+  const {
+    score,
+    currentIndex,
+    stage,
+    questions,
+    feedback,
+    userAnswer,
+    username,
+    region,
+  } = useSelector((state) => state.quiz);
+
   const countries = useSelector((state) => state.countries.list);
   const status = useSelector((state) => state.countries.status);
 
-  const score = useSelector((state) => state.quiz.score);
-  const currentIndex = useSelector((state) => state.quiz.currentIndex);
-  const stage = useSelector((state) => state.quiz.stage);
-
   const shuffleArray = (countries) => {
-    let copied = [...countries];
-    let countriesWithRandom = copied.map((country) => ({
-      country,
-      randomNumber: Math.random(),
-    }));
-    countriesWithRandom.sort((a, b) => a.randomNumber - b.randomNumber);
-    return countriesWithRandom.map((c) => c.country);
-  };
+    const copied = [...countries];
+    return copied
+      .map((country) => ({ country, randomNumber: Math.random() }))
+      .sort((a, b) => a.randomNumber - b.randomNumber)
+      .map((item) => item.country);
+  }
+  
 
   const handleStartQuiz = () => {
     if (!username.trim()) {
       alert("Oops! You forgot your username ");
       return;
     }
-    dispatch(fetchCountriesRegion(selectedRegion.toLowerCase()));
+    dispatch(fetchCountriesRegion(region.toLowerCase()));
     dispatch(resetQuiz());
     dispatch(setStage("inProgress"));
   };
@@ -43,40 +52,42 @@ const Quiz = () => {
   useEffect(() => {
     if (status === "success" && countries.length > 0) {
       const randomQuestions = shuffleArray(countries).slice(0, 15);
-      setQuizQuestions(randomQuestions);
-     
-      setFeedbackMsg("");
+      dispatch(setQuestions(randomQuestions));
+      dispatch(setFeedback(""));
+    
     }
-  }, [status, countries]);
+  }, [status, countries,dispatch]);
 
   const handleSubmitAnswer = () => {
-  const currentCountry = quizQuestions[currentIndex];
+  const currentCountry = questions[currentIndex];
   let finalScore = score;
 
-  const isCorrect = userAnswer.trim().toLowerCase() === currentCountry.name.common.toLowerCase();
+  const isCorrect = 
+  userAnswer.trim().toLowerCase() ===
+  currentCountry.name.common.toLowerCase();
 
   if (isCorrect) {
     finalScore = score + 1;
     dispatch(incrementScore());
-    setFeedbackMsg("Correct!");
+    dispatch(setFeedback("Correct!"))
   } else {
-    setFeedbackMsg(`Wrong! The correct answer was ${currentCountry.name.common}`);
+   dispatch(setFeedback(`Wrong! the correct answer was ${currentCountry.name.common}`))
   }
 
-  setUserAnswer("");
+  dispatch(setUserAnswer(""));
 
-  if (currentIndex + 1 < quizQuestions.length) {
+  if (currentIndex + 1 < questions.length) {
     dispatch(nextQuestion());
   } else {
     saveResultToLocalStorage(finalScore);
     setTimeout(() => {
       dispatch(setStage("finished"));
-    },2000);
+    },1500);
   }
 };
 
   const saveResultToLocalStorage = (finalScore) => {
-    const newResult = { username, region: selectedRegion, score: finalScore };
+    const newResult = { username, region, score: finalScore };
     const storedResults = JSON.parse(localStorage.getItem("quizResults")) || [];
     storedResults.push(newResult);
     localStorage.setItem("quizResults", JSON.stringify(storedResults));
@@ -92,7 +103,7 @@ const Quiz = () => {
           <h2>Start Quiz</h2>
           <h3>Select Region</h3>
 
-          <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
+          <select value={region} onChange={(e) => dispatch(setRegion)(e.target.value)}>
             <option value="Europe">Europe</option>
             <option value="Asia">Asia</option>
             <option value="Oceania">Oceania</option>
@@ -109,19 +120,23 @@ const Quiz = () => {
       {stage === "inProgress" && (
         <div>
           <h3>
-            Question {currentIndex + 1} / {quizQuestions.length}
+            Question {currentIndex + 1} / {questions.length}
           </h3>
-          {quizQuestions[currentIndex] && (
+          {questions[currentIndex] && (
             <>
               <img
-                src={quizQuestions[currentIndex].flags.png}
-                alt={quizQuestions[currentIndex].name.common}
+                src={questions[currentIndex].flags.png}
+                alt={questions[currentIndex].name.common}
                 width="150"
               />
-              
-              <input type="text" value={userAnswer} onChange={(e) => setUserAnswer(e.target.value)} />
+
+              <input 
+                type="text" 
+                value={userAnswer} 
+                onChange={(e) => dispatch(setUsername(e.target.value))}
+                />
               <button onClick={handleSubmitAnswer}>Submit</button>
-              <p>{feedbackMsg}</p>
+              <p>{feedback}</p>
             </>
           )}
         </div>
@@ -130,14 +145,12 @@ const Quiz = () => {
       {stage === "finished" && (
         <div>
           <h2>Quiz Finished!</h2>
-          {/* <p>{feedbackMsg}</p> */}
           <p>
-            {username}, your score: {score} / {quizQuestions.length} in {selectedRegion}
+            {username}, your score: {score} / {questions.length} in {region}
           </p>
            <button onClick={() => {
               dispatch(resetQuiz());
-              setQuizQuestions([]);
-              dispatch(setStage("start"));
+              dispatch(setStage("start"))
             }}
             >
               Restart Quiz 
