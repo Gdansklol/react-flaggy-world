@@ -6,7 +6,9 @@ const Home = () => {
 
   return (
     <main className="home">
-      <h1 className="home__title">Welcome to Flagg World 🌍</h1>
+      <h1 className="home__title">
+        Welcome to Flagg World 🌐
+      </h1>
 
       <section className="home__buttons">
         <button onClick={() => navigate("/countries")}>Study countries</button>

@@ -1,16 +1,1 @@
-/* App.css */
-.app-layout {
-  display: flex;
-  min-height: 100vh;
-}
 
-.sidebar-wrapper {
-  width: 260px; 
-  flex-shrink: 0;
-}
-
-.main-content {
-  flex: 1;
-  padding: 2rem;
-  background: #f8f8f8;
-}
