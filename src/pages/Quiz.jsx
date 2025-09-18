@@ -41,11 +41,13 @@ const Quiz = () => {
 
   const handleStartQuiz = () => {
     if (!username.trim()) {
-      alert("Oops! You forgot your username ");
+      alert("Oops! You forgot your username");
       return;
     }
     dispatch(fetchCountriesRegion(region.toLowerCase()));
     dispatch(resetQuiz());
+    dispatch(setUsername(username)); 
+    dispatch(setRegion(region));
     dispatch(setStage("inProgress"));
   };
 
@@ -88,18 +90,29 @@ const Quiz = () => {
   };
 
   const saveResultToLocalStorage = (finalScore) => {
-    const newResult = { username, region, score: finalScore };
+    const newResult = { username: username.trim(), region, score: finalScore };
     const storedResults = JSON.parse(localStorage.getItem("quizResults")) || [];
-    storedResults.push(newResult);
+
+    const existingIndex = storedResults.findIndex(
+      (r) => r.username === newResult.username && r.region === newResult.region
+    );
+
+    if (existingIndex !== -1) {
+      storedResults[existingIndex].score = Math.max(
+        storedResults[existingIndex].score,
+        newResult.score
+      );
+    } else {
+      storedResults.push(newResult);
+    }
+
     localStorage.setItem("quizResults", JSON.stringify(storedResults));
   };
 
   return (
     <div className="quiz-page">
       {status === "loading" && <p>Loading quiz data...</p>}
-      {status === "failed" && (
-        <p>Failed to load quiz data. Please try again.</p>
-      )}
+      {status === "failed" && <p>Failed to load quiz data. Please try again.</p>}
 
       {stage === "start" && (
         <section className="quiz-start">

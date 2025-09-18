@@ -10,7 +10,7 @@ const quizSlice = createSlice({
     feedback: "",
     userAnswer: "",
     username: "",
-    region: "Europe",
+    region: "Europe", 
   },
   reducers: {
     setQuestions: (state, action) => {
@@ -42,7 +42,7 @@ const quizSlice = createSlice({
       state.feedback = "";
       state.userAnswer = "";
       state.username = "";     
-      state.region = "Europe"; 
+      state.region = "Europe";
     },
     setStage: (state, action) => {
       state.stage = action.payload;
