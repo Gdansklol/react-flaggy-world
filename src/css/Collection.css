@@ -1,0 +1,120 @@
+.collection-page {
+  padding-top: 120px; 
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.collection-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.collection-item {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem 1rem;
+  flex: 1 1 calc(50% - 2rem);
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.collection-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+}
+
+.flag {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.country-info span {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+  display: block;
+  text-align: center;
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: #c0392b;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 480px) {
+  .collection-page {
+    padding-top: 140px; 
+  }
+  .collection-item {
+    flex: 1 1 100%;
+    max-width: 320px;
+  }
+  .country-info span {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .collection-item {
+    flex: 1 1 calc(50% - 2rem);
+    max-width: 340px;
+  }
+  .country-info span {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 968px) {
+  .collection-page {
+    padding-top: 150px; 
+  }
+  .collection-item {
+    flex: 1 1 calc(33.333% - 2rem);
+    max-width: 280px;
+  }
+  .country-info span {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .collection-item {
+    flex: 1 1 calc(25% - 2rem);
+    max-width: 260px;
+  }
+  .country-info span {
+    font-size: 1.3rem;
+  }
+}
