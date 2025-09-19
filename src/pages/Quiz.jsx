@@ -63,7 +63,6 @@ const Quiz = () => {
   const handleSubmitAnswer = () => {
     const currentCountry = questions[currentIndex];
     let finalScore = score;
-
     const isCorrect =
       userAnswer.trim().toLowerCase() ===
       currentCountry.name.common.toLowerCase();
@@ -77,10 +76,8 @@ const Quiz = () => {
         setFeedback(`Wrong! the correct answer was ${currentCountry.name.common}`)
       );
     }
-
     dispatch(setUserAnswer(""));
 
- 
     if (currentIndex + 1 < questions.length) {
       dispatch(nextQuestion());
     } else {
@@ -91,7 +88,6 @@ const Quiz = () => {
           score: finalScore,
         })
       );
-
       setTimeout(() => {
         dispatch(setStage("finished"));
       }, 1500);

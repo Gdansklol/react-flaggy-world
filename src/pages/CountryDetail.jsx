@@ -58,9 +58,16 @@ const CountryDetail = () => {
                 : "Not available"}
             </p>
 
+            <p>
+                <strong>Language:</strong>
+                {detail.languages 
+                ? Object.values(detail.languages).join(",")
+              : "Not available"}
+            </p>
+            
             {detail?.maps ? (
               <a href={detail.maps.googleMaps} target="_blank" rel="noreferrer">
-                🌍 View on Google Maps
+               Location:  🌍 View on Google Maps
               </a>
             ) : (
               <p>No map link available</p>
