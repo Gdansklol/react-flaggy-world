@@ -1,24 +1,30 @@
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteResult, setSortOrder } from "../redux/leaderboardSlice";
 import "../css/Leaderboard.css";
 
 const Leaderboard = () => {
-  const [results, setResults] = useState([]);
-  const [sortOrder, setSortOrder] = useState("desc"); 
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const storedResults = JSON.parse(localStorage.getItem("quizResults")) || [];
-    setResults(storedResults);
-  }, []);
+  const { results, sortOrder } = useSelector((state) => state.leaderboard);
 
-  const groupByRegion = (data) => {
-    return data.reduce((acc, item) => {
-      if (!acc[item.region]) acc[item.region] = [];
-      acc[item.region].push(item);
-      return acc;
-    }, {});
+  const groupByRegion = (allResultsFromLocalStorage) => {
+    const groupedResultsByRegion = {}; 
+
+    allResultsFromLocalStorage.forEach((oneUserResult) => {
+      const userRegion = oneUserResult.region;
+
+      if (!groupedResultsByRegion[userRegion]) {
+        groupedResultsByRegion[userRegion] = [];
+      }
+
+      groupedResultsByRegion[userRegion].push(oneUserResult);
+    });
+
+    return groupedResultsByRegion;
   };
 
   const groupedResults = groupByRegion(results);
+
   Object.keys(groupedResults).forEach((region) => {
     groupedResults[region].sort((a, b) =>
       sortOrder === "asc" ? a.score - b.score : b.score - a.score
@@ -26,11 +32,7 @@ const Leaderboard = () => {
   });
 
   const handleDelete = (username, region) => {
-    const updated = results.filter(
-      (r) => !(r.username === username && r.region === region)
-    );
-    setResults(updated);
-    localStorage.setItem("quizResults", JSON.stringify(updated));
+    dispatch(deleteResult({ username, region }));
   };
 
   return (
@@ -40,13 +42,13 @@ const Leaderboard = () => {
       <div className="sort-controls">
         <button
           className={sortOrder === "desc" ? "active" : ""}
-          onClick={() => setSortOrder("desc")}
+          onClick={() => dispatch(setSortOrder("desc"))} 
         >
           🔝 High → Low
         </button>
         <button
           className={sortOrder === "asc" ? "active" : ""}
-          onClick={() => setSortOrder("asc")}
+          onClick={() => dispatch(setSortOrder("asc"))} 
         >
           🔽 Low → High
         </button>
@@ -62,7 +64,9 @@ const Leaderboard = () => {
                   <li key={index} className="leaderboard-item">
                     <div className="left">
                       <span className="rank">#{index + 1}</span>
-                      <span className="name">{res.username || "Anonymous"}</span>
+                      <span className="name">
+                        {res.username || "Anonymous"}
+                      </span>
                     </div>
                     <div className="right">
                       <span className="score">{res.score} points</span>
