@@ -14,6 +14,7 @@
   font-weight: 800;
   background: linear-gradient(to right, #e74c3c, #f39c12, #27ae60, #2980b9, #8e44ad);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
   margin-bottom: 2rem;
@@ -76,5 +77,35 @@
 
   .home__buttons button {
     width: 80%;
+  }
+}
+
+.banner {
+  position: relative;
+}
+
+.title svg {
+  width: 100%;
+  height: auto;
+}
+
+.draw-text {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 4s ease forwards, glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 8px #e74c3c);
+  }
+  100% {
+    filter: drop-shadow(0 0 20px #8e44ad);
   }
 }
