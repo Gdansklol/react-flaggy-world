@@ -12,6 +12,7 @@ import {
   setUsername,
   setRegion,
 } from "../redux/quizSlice";
+import { addResult } from "../redux/leaderboardSlice"; 
 import "../css/Quiz.css";
 
 const Quiz = () => {
@@ -41,7 +42,7 @@ const Quiz = () => {
 
   const handleStartQuiz = () => {
     if (!username.trim()) {
-      alert("Oops! You forgot your username");
+      alert("Oops! You forgot your username ");
       return;
     }
     dispatch(fetchCountriesRegion(region.toLowerCase()));
@@ -79,34 +80,22 @@ const Quiz = () => {
 
     dispatch(setUserAnswer(""));
 
+ 
     if (currentIndex + 1 < questions.length) {
       dispatch(nextQuestion());
     } else {
-      saveResultToLocalStorage(finalScore);
+      dispatch(
+        addResult({
+          username: username.trim(),
+          region,
+          score: finalScore,
+        })
+      );
+
       setTimeout(() => {
         dispatch(setStage("finished"));
       }, 1500);
     }
-  };
-
-  const saveResultToLocalStorage = (finalScore) => {
-    const newResult = { username: username.trim(), region, score: finalScore };
-    const storedResults = JSON.parse(localStorage.getItem("quizResults")) || [];
-
-    const existingIndex = storedResults.findIndex(
-      (r) => r.username === newResult.username && r.region === newResult.region
-    );
-
-    if (existingIndex !== -1) {
-      storedResults[existingIndex].score = Math.max(
-        storedResults[existingIndex].score,
-        newResult.score
-      );
-    } else {
-      storedResults.push(newResult);
-    }
-
-    localStorage.setItem("quizResults", JSON.stringify(storedResults));
   };
 
   return (

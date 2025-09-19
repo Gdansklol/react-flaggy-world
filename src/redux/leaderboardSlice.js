@@ -9,6 +9,11 @@ const leaderboardSlice = createSlice({
     sortOrder: "desc",       
   },
   reducers: {
+    addResult:(state, action) => {
+        state.results.push(action.payload);
+        localStorage.setItem("quizResults", JSON.stringify(state.results));
+    },
+
     deleteResult: (state, action) => {
       const { username, region } = action.payload;
       state.results = state.results.filter(
@@ -22,6 +27,6 @@ const leaderboardSlice = createSlice({
   },
 });
 
-export const { deleteResult, setSortOrder } = leaderboardSlice.actions;
+export const { addResult, deleteResult, setSortOrder } = leaderboardSlice.actions;
 
 export default leaderboardSlice.reducer;
