@@ -5,13 +5,26 @@ const initialResults = JSON.parse(localStorage.getItem("quizResults")) || [];
 const leaderboardSlice = createSlice({
   name: "leaderboard",
   initialState: {
-    results: initialResults,   
-    sortOrder: "desc",       
+    results: initialResults,
+    sortOrder: "desc",
   },
   reducers: {
-    addResult:(state, action) => {
-        state.results.push(action.payload);
-        localStorage.setItem("quizResults", JSON.stringify(state.results));
+    addResult: (state, action) => {
+      const { username, region, score } = action.payload;
+      const existingIndex = state.results.findIndex(
+        (res) => res.username === username && res.region === region
+      );
+
+      if (existingIndex !== -1) {
+        state.results[existingIndex].score = Math.max(
+          state.results[existingIndex].score,
+          score
+        );
+      } else {
+        state.results.push({ username, region, score });
+      }
+
+      localStorage.setItem("quizResults", JSON.stringify(state.results));
     },
 
     deleteResult: (state, action) => {
@@ -21,6 +34,7 @@ const leaderboardSlice = createSlice({
       );
       localStorage.setItem("quizResults", JSON.stringify(state.results));
     },
+
     setSortOrder: (state, action) => {
       state.sortOrder = action.payload;
     },
