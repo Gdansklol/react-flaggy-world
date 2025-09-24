@@ -1,9 +1,14 @@
-#  Flagg World | React, Redux Toolkit + Vite 
+#  Flagg World 
 
 ## En webbapp byggd med **React + Redux Toolkit**  
 för att studera världens flaggor, göra quiz och följa resultat  
 på en **leaderboard**.
 
+för att lära sig världens flaggor, köra quiz och följa resultat på en leaderboard.
+
+👉 Live-demo: flag-world-app.web.app
+
+## Funktioner
 ---
 
 ## Beskrivning
@@ -19,16 +24,13 @@ Data hämtas från [REST Countries API](https://restcountries.com/).
 ---
 
 ##  Funktioner
-
-### G-nivå
+### krav
 - Startsida med navigation: `/countries`, `/collection`, `/quiz`, `/leaderboard`  
 - Visa länder per region med flaggor  
 - Klicka på flagga → landdetaljsida  
 - Möjlighet att spara länder i **Collection** (lagras i localStorage)  
 - Dubletter förhindras  
-
-### VG-nivå
-#### Quiz
+<hr>
 - Användaren väljer **region** + skriver in sitt **användarnamn**  
 - Quizet består av **15 slumpmässiga frågor**  
 - Feedback ges direkt (**Correct! / Wrong!**)  
