@@ -45,7 +45,7 @@ const Home = () => {
               fontSize="80"
               fontFamily="cursive"
             >
-              Flagg World 🌐
+              Flag World 🌐
             </text>
 
             <text
