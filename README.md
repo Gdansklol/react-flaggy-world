@@ -1,4 +1,4 @@
-#  Flagg World 
+#  Flag World 
 
 ## En webbapp byggd med **React + Redux Toolkit**  
 för att studera världens flaggor, göra quiz och följa resultat  
