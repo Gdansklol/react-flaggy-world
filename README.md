@@ -6,10 +6,11 @@ på en **leaderboard**.
 
 för att lära sig världens flaggor, köra quiz och följa resultat på en leaderboard.
 
-👉 Live-demo: flag-world-app.web.app
+👉 Live-demo: länk : (https://flag-world-app.web.app)
+---
 
 ## Funktioner
----
+
 
 ## Beskrivning
 
@@ -25,12 +26,13 @@ Data hämtas från [REST Countries API](https://restcountries.com/).
 
 ##  Funktioner
 ### krav
+#### G-nivå
 - Startsida med navigation: `/countries`, `/collection`, `/quiz`, `/leaderboard`  
 - Visa länder per region med flaggor  
 - Klicka på flagga → landdetaljsida  
 - Möjlighet att spara länder i **Collection** (lagras i localStorage)  
 - Dubletter förhindras  
-<hr>
+#### VG-nivå
 - Användaren väljer **region** + skriver in sitt **användarnamn**  
 - Quizet består av **15 slumpmässiga frågor**  
 - Feedback ges direkt (**Correct! / Wrong!**)  
