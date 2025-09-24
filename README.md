@@ -6,7 +6,7 @@ på en **leaderboard**.
 
 för att lära sig världens flaggor, köra quiz och följa resultat på en leaderboard.
 
-👉 Live-demo: länk : (https://flag-world-app.web.app)
+### 👉 Live-demo : (https://flag-world-app.web.app)
 ---
 
 ## Funktioner
@@ -73,16 +73,7 @@ Data hämtas från [REST Countries API](https://restcountries.com/).
 
 ##  Logik & State Management (Redux)
 
-Vi använder **Redux Toolkit** för att hantera appens state:
-
-- `score` → antal rätt svar  
-- `currentIndex` → nuvarande frågenummer  
-- `stage` → `"start" | "inProgress" | "finished"`  
-- `questions` → lista med slumpmässiga frågor  
-- `feedback` → text (Correct! / Wrong!)  
-- `userAnswer` → spelarens svar  
-- `username` → spelarens namn  
-- `region` → vald region  
+ **Redux Toolkit** för att hantera appens state:
 
 Exempel på actions:
 ```js
@@ -93,44 +84,23 @@ dispatch(nextQuestion())
 dispatch(setStage("finished"))
 ```
 
-
 ## Arbetssätt 
-1. Strukturering av projektet
-Började med att tänka igenom mapp- och sidstrukturen.
-Satte upp App som förälder och planerade routing via React Router för sidor som /, /countries, /collection, /quiz, /leaderboard.
+1. Projektstruktur → satte upp mappar, App som root, routing 
+med React Router
 
-2. Navigation & gränssnitt
-Implementerade en Navbar med aktiva länkar (useLocation) och byggde en Home-sida med knappar för navigation.
+2. Navigation → Navbar med aktiva länkar (useLocation)
 
-3. Länderlistor & detaljer
-Lade till en Countries-sida där användaren kan välja region.
-När ett land klickas → navigerar till CountryDetail (data från REST Countries API).
-Användaren kan spara länder i en Collection (lagras i localStorage).
+3. Countries → lista per region + detaljerad sida
 
-4. Quiz-funktionalitet
-Började enkelt med useState för att testa logiken.
-Flyttade sedan över till Redux Toolkit → delade upp state i olika slices (quiz, countries, leaderboard).
-Detta gjorde statehanteringen mer enhetlig och återanvändbar.
+4. Collection → favoritländer sparas i localStorage
 
-5. Asynkrona anrop (Redux Thunk)
-Använde createAsyncThunk för API-anrop.
-Införde tre tydliga states:
+5. Quiz → först med useState, sedan flyttad till Redux Toolkit
 
-- loading
+6. Async → createAsyncThunk för API-anrop (loading, success, error)
 
-- fulfilled
+7. Leaderboard → grupperad per region, sorterad efter poäng, sparas i localStorage
 
-- error
-Detta gjorde det enklare att hantera och testa API-flöden.
-
-6. Leaderboard & persistens
-Byggde en leaderboard som grupperar resultat per region och sorterar efter poäng.
-Data sparas i localStorage och användare kan ta bort resultat.
-Dubbelinmatningar förhindras.
-
-7. Iterativ utveckling
-Testade ofta i små steg → lättare att hitta buggar.
-Förbättrade gradvis både prestanda och underhållbarhet genom att flytta logik till Redux och separera komponenter.
+8. Iterativ utveckling → små steg → test → förbättra
 
 ## Utmaningar
 - Förstå varför dispatch(setRegion()) krävs istället 
