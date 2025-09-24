@@ -59,7 +59,7 @@ const Home = () => {
               fontFamily="cursive"
               className="draw-text"
             >
-              Flagg World 🌐
+              Flag World 🌐
             </text>
           </svg>
         </div>
