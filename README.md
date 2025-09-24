@@ -4,13 +4,8 @@
 för att studera världens flaggor, göra quiz och följa resultat  
 på en **leaderboard**.
 
-för att lära sig världens flaggor, köra quiz och följa resultat på en leaderboard.
-
 ### 👉 Live-demo : (https://flag-world-app.web.app)
 ---
-
-## Funktioner
-
 
 ## Beskrivning
 
@@ -27,7 +22,8 @@ Data hämtas från [REST Countries API](https://restcountries.com/).
 ##  Funktioner
 ### krav
 #### G-nivå
-- Startsida med navigation: `/countries`, `/collection`, `/quiz`, `/leaderboard`  
+- Startsida med navigation: `/countries`,`/countries/:countryName`, 
+`/collection`, `/quiz`, `/leaderboard`  
 - Visa länder per region med flaggor  
 - Klicka på flagga → landdetaljsida  
 - Möjlighet att spara länder i **Collection** (lagras i localStorage)  
