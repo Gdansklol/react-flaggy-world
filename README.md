@@ -1,88 +1,82 @@
-# React + Vite (personligt projekt)
+#  Flagg World | React, Redux Toolkit + Vite 
 
-## Projekt – Country Explorer
+## En webbapp byggd med **React + Redux Toolkit**  
+för att studera världens flaggor, göra quiz och följa resultat  
+på en **leaderboard**.
+
+---
+
+## Beskrivning
 
 Ett skol-/projekt i **React** där man kan:
 - Studera länder från olika regioner (Europe, Asia, Oceania, Americas, Africa).
 - Spara favoritländer i en **Collection** (lagras i localStorage).
-- Köra ett **Quiz** (VG-nivå) för att testa sina kunskaper.
-- Se resultat på en **Leaderboard** (VG-nivå).
+- Köra ett **Quiz** för att testa sina kunskaper.
+- Se resultat på en **Leaderboard**.
 
 Data hämtas från [REST Countries API](https://restcountries.com/).
 
 ---
 
-##  G-nivå
-- Startsida med navigation: `/countries`, `/collection`, `/quiz`, `/leaderboard`
-- Visa länder per region med flaggor
-- Klicka på flagga → landdetaljsida
-- Möjlighet att spara länder i Collection (localStorage)
+##  Funktioner
 
-##  VG-nivå
-- Quiz
--  Leaderboard
+### G-nivå
+- Startsida med navigation: `/countries`, `/collection`, `/quiz`, `/leaderboard`  
+- Visa länder per region med flaggor  
+- Klicka på flagga → landdetaljsida  
+- Möjlighet att spara länder i **Collection** (lagras i localStorage)  
+- Dubletter förhindras  
 
-### Quiz
-Byggt med **React** och **Redux Toolkit**.
+### VG-nivå
+#### Quiz
+- Användaren väljer **region** + skriver in sitt **användarnamn**  
+- Quizet består av **15 slumpmässiga frågor**  
+- Feedback ges direkt (**Correct! / Wrong!**)  
+- Resultatet sparas i **localStorage**  
 
-- Användaren kan välja region och skriva in sitt användarnamn.  
-- Quizet består av **15 slumpmässiga frågor** från den valda regionen.  
-- Varje fråga visar en flagga → användaren ska skriva landets namn.  
-- Feedback ges direkt (Correct! / Wrong!).  
-- Resultatet sparas i **localStorage** tillsammans med användarnamn och region.  
-
-### Leaderboard
-- Visar en lista av alla resultat per region.
-- För varje deltagare visas:
-  - **Användarnamn**
-  - **Poäng (antal rätt)**
+#### Leaderboard
+- Resultat **grupperas per region**  
+- Sortering sker **Högst → Lägst** (default)  
+- Användare kan **radera** sina resultat  
+- Data sparas i **localStorage**  
 
 ---
 
-## Använd syntax
+##  Quiz-flöde
+
+1. Användaren matar in ett **användarnamn** och väljer en **region**  
+2. Appen hämtar **15 slumpmässiga länder** från API:et  
+3. För varje fråga:
+   - Visa **flaggan**  
+   - Användaren skriver in landets namn  
+   - Kontrollera svaret:  
+     - Rätt → `incrementScore()`  
+     - Fel → Visa rätt land  
+4. Efter sista frågan:
+   - Resultatet sparas i localStorage (användarnamn + region + poäng)  
+   - Användaren kan starta om quizet  
+
+---
+
+##  Tekniker & Syntax
 
 - **useSelector** → hämta data från Redux  
 - **useDispatch** → skicka actions till Redux  
-- **useEffect** → kör kod när data ändras (t.ex. efter API-anrop)  
-- **localStorage** → spara resultat lokalt i webbläsaren  
-
----
-
-## Struktur (Quiz-flöde)
-
-1. **Startläge (`start`)**
-   - Användaren skriver in sitt namn och väljer region.
-   - Klickar på **Start Quiz**.
-
-2. **Hämta frågor**
-   - Appen hämtar regionens länder från API:et.
-   - 15 slumpmässiga frågor väljs ut.
-
-3. **Svarshantering**
-   - Användaren skriver sitt svar och trycker **Submit**.
-   - Om rätt → `score + 1`, feedback visar **Correct!**.
-   - Om fel → feedback visar rätt svar.
-
-4. **Nästa fråga**
-   - Om fler frågor → nästa fråga visas.
-   - Om sista frågan → resultatet sparas i localStorage.
-
-5. **Slutläge (`finished`)**
-   - Användaren ser sitt slutresultat (`poäng / antal frågor`).
-   - Kan välja att starta om quizet.
+- **useEffect** → kör kod vid ändringar (t.ex. efter API-anrop)  
+- **localStorage** → lagra resultat lokalt i webbläsaren  
 
 ---
 
 ##  Logik & State Management (Redux)
 
-Vi använder **Redux Toolkit** för att hantera quizets state:
+Vi använder **Redux Toolkit** för att hantera appens state:
 
 - `score` → antal rätt svar  
 - `currentIndex` → nuvarande frågenummer  
 - `stage` → `"start" | "inProgress" | "finished"`  
 - `questions` → lista med slumpmässiga frågor  
-- `feedback` → text som visar om svaret var rätt eller fel  
-- `userAnswer` → det användaren skriver i input  
+- `feedback` → text (Correct! / Wrong!)  
+- `userAnswer` → spelarens svar  
 - `username` → spelarens namn  
 - `region` → vald region  
 
@@ -94,26 +88,68 @@ dispatch(incrementScore())
 dispatch(nextQuestion())
 dispatch(setStage("finished"))
 ```
----
-
-## Arbetssätt
-
-- Började med useState för att snabbt testa quiz-logiken.
-
-- Flyttade gradvis allt till Redux Toolkit för en enhetlig state management.
-
-- Gjorde små steg och testade varje gång.
-
-## Vad var svårt?
-
-- Att förstå varför man måste anropa dispatch(setRegion(...)) istället för bara setRegion.
-
-- Att flytta useState → Redux utan att blanda ihop dubbla states.
-
-- Hantera sista frågans feedback innan quizet avslutas.
-
-## Vad har jag lärt mig?
-
-- Att arbeta iterativt (först useState, sedan Redux) gör det lättare att förstå och bygga steg för steg.
 
 
+## Arbetssätt 
+1. Strukturering av projektet
+Började med att tänka igenom mapp- och sidstrukturen.
+Satte upp App som förälder och planerade routing via React Router för sidor som /, /countries, /collection, /quiz, /leaderboard.
+
+2. Navigation & gränssnitt
+Implementerade en Navbar med aktiva länkar (useLocation) och byggde en Home-sida med knappar för navigation.
+
+3. Länderlistor & detaljer
+Lade till en Countries-sida där användaren kan välja region.
+När ett land klickas → navigerar till CountryDetail (data från REST Countries API).
+Användaren kan spara länder i en Collection (lagras i localStorage).
+
+4. Quiz-funktionalitet
+Började enkelt med useState för att testa logiken.
+Flyttade sedan över till Redux Toolkit → delade upp state i olika slices (quiz, countries, leaderboard).
+Detta gjorde statehanteringen mer enhetlig och återanvändbar.
+
+5. Asynkrona anrop (Redux Thunk)
+Använde createAsyncThunk för API-anrop.
+Införde tre tydliga states:
+
+- loading
+
+- fulfilled
+
+- error
+Detta gjorde det enklare att hantera och testa API-flöden.
+
+6. Leaderboard & persistens
+Byggde en leaderboard som grupperar resultat per region och sorterar efter poäng.
+Data sparas i localStorage och användare kan ta bort resultat.
+Dubbelinmatningar förhindras.
+
+7. Iterativ utveckling
+Testade ofta i små steg → lättare att hitta buggar.
+Förbättrade gradvis både prestanda och underhållbarhet genom att flytta logik till Redux och separera komponenter.
+
+## Utmaningar
+- Förstå varför dispatch(setRegion()) krävs istället 
+för vanlig setRegion()
+
+- Undvika dubbla states vid övergången från useState → Redux
+
+- Visa feedback på sista frågan innan quizet avslutas
+
+## Lärdomar
+- Att strukturera projektet tidigt gör utvecklingen enklare
+
+- Redux Toolkit gör statehantering enklare och tydligare
+
+- Att dela upp i slices per domän gör koden mer återanvändbar
+
+- Genom Redux Thunk kunde vi hantera:
+
+> loading (data hämtas)
+
+> fulfilled (klart)
+
+ >error (felhantering)
+
+-  Iterativ utveckling (bygga → testa → förbättra)
+ gjorde projektet stabilare
