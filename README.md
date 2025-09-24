@@ -113,9 +113,7 @@ dispatch(setStage("finished"))
 - Hantera sista frågans feedback innan quizet avslutas.
 
 ## Vad har jag lärt mig?
-- Redux Toolkit gör state management enklare än klassisk Redux.
-
-- Vikten av att hålla all quiz-logik i Redux → enklare och tydligare kod.
 
 - Att arbeta iterativt (först useState, sedan Redux) gör det lättare att förstå och bygga steg för steg.
+
 

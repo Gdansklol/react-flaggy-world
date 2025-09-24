@@ -125,7 +125,7 @@ const Quiz = () => {
               onChange={(e) => dispatch(setUsername(e.target.value))}
               required
             />
-            <label className="quiz-label">Your name</label>
+            <label className="quiz-label">Your username</label>
             <span className="top-line"></span>
             <span className="bottom-line"></span>
           </div>
@@ -148,7 +148,7 @@ const Quiz = () => {
                 alt={questions[currentIndex].name.common}
                 className="quiz-flag"
               />
-
+             <h3>Which country does this flag belog to? </h3>
               <div className="input-container">
                 <input
                   type="text"
