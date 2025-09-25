@@ -113,7 +113,7 @@ för vanlig setRegion()
 
 - Att dela upp i slices per domän gör koden mer återanvändbar
 
-- Genom Redux Thunk kunde vi hantera:
+- Genom Redux Thunk kunde hantera:
 
 > loading (data hämtas)
 
